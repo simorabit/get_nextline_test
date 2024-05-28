@@ -71,18 +71,21 @@ char *get_next_line(int fd)
 	int endLine;
 	int readed;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX
-		|| read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return NULL;
 	line = ft_strdup(buf);
 	while (1)
 	{
-		if((newLine = ft_strchr(line, '\n')))
+		if ((newLine = ft_strchr(line, '\n')))
 			break;
-		if(!(readed = read(fd, buf, BUFFER_SIZE)))
+		if (!(readed = read(fd, buf, BUFFER_SIZE)))
 			break;
+		if (readed == -1)
+			return (free(line), NULL);
 		buf[readed] = '\0';
 		line = ft_strjoin(line, buf);
+		if(!line)
+			return NULL;
 	}
 	if (ft_strlen(line) == 0)
 	{
@@ -103,6 +106,8 @@ char *get_next_line(int fd)
 }
 #include <stdio.h>
 #include <fcntl.h>
+#include <fcntl.h>
+
 void	f()
 {
 	system("leaks a.out");
